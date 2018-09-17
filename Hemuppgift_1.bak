@@ -1,27 +1,62 @@
 #lang racket
 
-(displayln "Hemuppgifter 18/9")
+;Hemuppgifter 18/9
 
-(newline)
+;Vad blir det för resultat vid beräkningen av följande Scheme-uttryck?
 
-(displayln "Uppgift 1c)")
+;Uppgift 1c)
 
-(newline)
+(/ 2 3)
 
-(displayln "Uppgift 1d)")
 
-(newline)
 
-(displayln "Uppgift 2c)")
 
-(newline)
 
-(displayln "Uppgift 2d)")
 
-(newline)
+;Uppgift 1d)
 
-(displayln "Uppgift 3c)")
+(+ (* 0.1 20) (/ 4 -3))
 
-(newline)
 
-(displayln "Uppgift 2d)")
+
+
+
+
+;Översätt följande aritmetiska uttryck till Scheme-uttryck.
+
+;Uppgift 2c)
+
+;(2.5/(5*(1/10)))
+
+(/ 2.5 (* 5(/ 1 10)))
+
+
+
+
+
+
+;Uppgift 2d)
+
+;5 × ((537 × (98,3 + (375 - (2,5 × 153)))) + 255)
+
+(* 5 (+ (* 537 (+ 98.3(- 375 (* 2.5 153)))) 255))
+
+
+
+
+
+
+;Översätt följande Scheme-uttryck till det vanliga skrivsättet som används t.ex i matematik.
+
+;Uppgift 3c)
+
+(+ (* 10 2.3) (* 4.5 2.3))
+
+
+
+
+
+
+;Uppgift 3d)
+
+(/ (- 10 2.3) (- 10 4.5))
