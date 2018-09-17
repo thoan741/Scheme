@@ -1,0 +1,27 @@
+#lang racket
+
+(displayln "Hemuppgifter 18/9")
+
+(newline)
+
+(displayln "Uppgift 1c)")
+
+(newline)
+
+(displayln "Uppgift 1d)")
+
+(newline)
+
+(displayln "Uppgift 2c)")
+
+(newline)
+
+(displayln "Uppgift 2d)")
+
+(newline)
+
+(displayln "Uppgift 3c)")
+
+(newline)
+
+(displayln "Uppgift 2d)")
