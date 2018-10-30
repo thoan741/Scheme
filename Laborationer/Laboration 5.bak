@@ -1,0 +1,448 @@
+(require (lib "trace.ss"))
+
+;Laboration 5
+
+;Jag väljer att kommentera mängder som element i listor.
+;Jag är van att arbeta med listor så jag valde det sättet.
+
+;uppgift 1
+
+;lite hjälpfunktioner
+
+(define first-of
+  (lambda (set)
+    (car set)))
+
+(define rest-of
+  (lambda (set)
+    (cdr set)))
+
+(define empty-set?
+  (lambda (set)
+    (null? set)))
+
+(define make-empty
+  (lambda ()
+    '()))
+
+(define insert-el
+  (lambda (el set)
+    (cons el set)))
+
+(define remove-el
+  (lambda (el set)
+    (cond ((null? set) (make-empty))
+          ((equal? el (first-of set)) (remove-el el (rest-of set)))
+          (else (insert-el (first-of set) (remove-el el (rest-of set)))))))
+
+;(define remove-duplicate
+;  (lambda (set)
+;    (if (null? set)
+;        '()
+;        (insert-el (first-of set)(remove-duplicate (remove* (list (first-of set)) (rest-of set)))))))
+
+(define remove-duplicate
+  (lambda (set)
+    (cond ((null? set)
+           (make-empty))
+          ((member? (first-of set) (rest-of set))
+           (remove-duplicate (rest-of set)))
+          (else (insert-el (first-of set) (remove-duplicate (rest-of set)))))))
+        
+
+(define combine-sets
+  (lambda (set1 set2)
+    (append set1 set2)))
+
+(define set?
+  (lambda (set)
+    (list? set)))
+
+(define do-to-each
+  (lambda (proc set)
+    (map proc set)))
+
+(define set-length
+  (lambda (set)
+    (length set)))
+
+
+;uppgift 3
+
+;gör en make-set som tar bort dubbletter av element.
+
+;först en hjälpfunktion som tar bort dubbletter i element som är mängder.
+
+
+
+;make-set (smart)
+
+;make-set (dum)
+
+;(define make-set
+;  (lambda (set)
+;    set))
+
+
+;uppgift 2
+
+;skriv en procedur member som kollar om ett element finns i ett set:
+;(define member?
+;  (lambda (el set)
+;    (cond ((empty-set? set) #f)
+;          ((set? el) (subset? el set))
+;          ((equal? el (first-of set)) #t)
+;          (else (member? el (rest-of set))))))
+
+(define member?
+  (lambda (el set)
+    (cond ((empty-set? set) #f)
+          ((same-elem? el (first-of set)) #t)
+          (else (member? el (rest-of set))))))
+
+(displayln "member check:")
+
+;(member? 3 (make-set'(1 2 3 4)))
+;(member? 5 (make-set'(1 2 3 4)))
+;(member? 3 (make-set'(1 2(3 4))))
+
+(newline)
+
+;skriv en procedur som kollar om alla element som finns i ett set finns i ett andra set:
+
+;(define subset?
+;  (lambda (set1 set2)
+;    (cond ((empty-set? set1) #t)
+;          ((member? (first-of set1) set2) (subset? (rest-of set1) set2))
+;          (else #f))))
+
+(define subset?
+  (lambda (set1 set2)
+    (cond ((null? set1) #t)
+          ((not (set? set1)) #f)
+          ((member? (first-of set1) set2)
+           (subset? (rest-of set1) set2))
+          (else #f))))
+
+(displayln "subset check:")
+
+;(subset? (make-set '(1 2 3 4)) (make-set'(1 2 3 4 5)))
+;(subset? (make-set'(1 2 3 4 5)) (make-set'(1 2 3 4)))
+;(subset? (make-set'(1 2 (3 4))) (make-set'(1 2 (3 4) 5)))
+
+(newline)
+
+;skriv en procedur som kollar om två mängder innehåller exakt samma element, oavsett ordning:
+
+;(define same-set?
+;  (lambda (set1 set2)
+;    (if (and (subset? set1 set2) (subset? set2 set1))
+;        #t
+;        #f)))
+
+(define same-set?
+  (lambda (set1 set2)
+    (cond ;((not (and (set? set1) (set? set2))) #f)
+          ;((not (= (set-length set1) (set-length set2))) #f)
+          ((and (subset? set1 set2) (subset? set2 set1)) #t)
+          (else #f))))
+
+(displayln "same-set check:")
+
+;(same-set? (make-set'(1 2 3 4)) (make-set'(1 2 3 4 5)))
+;(same-set? (make-set'(1 2 3 4 5)) (make-set'(1 2 3 4)))
+;(same-set? (make-set'(1 2 (3 4))) (make-set'(1 2 (3 4))))
+
+(newline)
+
+;skriv en procedur som kollar om två element är samma
+
+
+
+;(define same-elem?
+;  (lambda (e1 e2)
+;    (cond ((and (list? e1) (list? e2)) (same-set? e1 e2))
+;          ((and (number? e1) (number? e2)) (= e1 e2))
+;          (else (eq? e1 e2)))))
+
+(define same-elem?
+  (lambda (e1 e2)
+    (cond ((and (symbol? e1) (symbol? e2))
+           (if (eq? e1 e2)
+               #t
+               #f))
+          ((and (number? e1) (number? e2))
+           (if (= e1 e2)
+               #t
+               #f))
+          ((and (set? e1) (set? e2))
+           (if (same-set? e1 e2)
+               #t
+               #f))
+          (else #f))))
+
+(displayln "same-elem check")
+
+;(same-elem? 'a 'b)
+;(same-elem? 'a 'a)
+;(same-elem? 1 2)
+;(same-elem? 1 1)
+;(same-elem? (make-set '(1 2 (3 4))) (make-set '(1 2)))
+;(same-elem? (make-set '(1 2 (3 4))) (make-set '(1 2 (3 4))))
+
+;uppgift 3
+;definiera om make-set så att den tar bort dubbletter
+
+(define make-set
+  (lambda (set)
+    (cond ((empty-set? set) (make-empty))
+          ((member? (first-of set) (make-set(rest-of set)))
+           (make-set (rest-of set)))
+          ((set? (first-of set)) (insert-el (make-set (first-of set)) (make-set (rest-of set))))
+          (else (insert-el (first-of set) (make-set (rest-of set)))))))
+
+;(define make-set-help
+;  (lambda (set)
+;    (remove-duplicate set)))
+
+;(define make-set
+;  (lambda (set)
+;    (cond ((null? set) (make-empty))
+;          ((member? (first-of set) (rest-of set))
+;           (insert-el (first-of set) (make-set (remove-el (first-of set) set))))
+;          ((subset? (make-a-set (first-of set)) (rest-of set))
+;           (make-set (rest-of set)))
+;          (else (insert-el (first-of set) (make-set (rest-of set)))))))
+  
+
+(newline)
+
+(displayln "uppgift 3, tester med uppdaterad make-set")
+
+;(same-set? '(1 2 3) '(1 2 3 2 1))
+;(same-elem? '(1 2 3) '(1 2 3 4))
+;(subset? '(1 2 3 2 1) '(1 2 3 4))
+
+;uppgift 4
+
+;skapa en procedur som skapar unionen av två mängder: (element som finns i någon av mängderna)
+
+(define union
+  (lambda (set1 set2)
+    (make-set (combine-sets set1 set2))))
+
+;skapa en procedur som beräknar snittet av två mängder: (element som finns i båda mängderna)
+
+(define intersection
+  (lambda (set1 set2)
+    (cond ((or (empty-set? set1) (empty-set? set2)) (make-empty))
+          ((member? (first-of set1) set2)
+           (insert-el (first-of set1)
+                      (intersection (rest-of set1) set2)))
+          (else (intersection (rest-of set1) set2))
+          )))
+
+;skapa en procedur som skapar differensen mellan två mängder
+
+
+(define difference
+  (lambda (set1 set2)
+    (cond ((empty-set? set1) (make-empty))
+          ((member? (first-of set1) set2)
+           (difference (rest-of set1) set2))
+          (else (insert-el (first-of set1)
+                           (difference (rest-of set1) set2))))))
+  
+;(define difference
+;  (lambda (set1 set2)
+;    (cond ((empty-set? set1) set2)
+;          ((member? (first-of set1) set2)
+;           (difference (rest-of set1)
+;                         (remove-el (first-of set1) set2)))
+;          (else (insert-el (first-of set1)
+;                           (difference (rest-of set1) set2)))
+;          )))
+
+;uppgift 5
+
+(define myvector
+  (lambda (s1 s2)
+    (if (null? s1)
+        '()
+        (insert-el (vector (first-of s1) (first-of s2))
+                   (myvector (rest-of s1) s2)))))
+
+(define cartesian-product
+  (lambda (s1 s2)
+    (if (null? s2)
+        '()
+        (combine-sets (myvector s1 s2)
+                   (cartesian-product s1 (rest-of s2))))))
+
+;uppgift 6
+
+;skriv om funktioner så svansrekursiva
+
+;procedurer från uppgift 1 som inte är svansrekursiva, som nu definieras om:
+
+;(define remove-el
+;  (lambda (el set)
+;    (define remove-el-inner
+;      (lambda (el set new-set)
+;        (cond ((empty-set? set) new-set)
+;              ((same-elem? el (first-of set)) (remove-el-inner el (rest-of set) new-set))
+;              (else (remove-el-inner el (rest-of set) (insert-el (first-of set) new-set)))
+;              )))
+;    (remove-el-inner el set (make-empty))))
+
+
+;(define remove-duplicate
+;  (lambda (set)
+;    (define remove-duplicate-inner
+;      (lambda (set new-set)
+;        (if (null? set)
+;            new-set
+;            (remove-duplicate-inner (remove* (list (first-of set)) (rest-of set))(insert-el (first-of set) new-set)))))
+;    (remove-duplicate-inner set '())))
+
+;(define remove-duplicate
+;  (lambda (set)
+;    (define remove-duplicate-inner
+;      (lambda (set new-set)
+;        (cond ((null? set)
+;               new-set)
+;              ((member? (first-of set) (rest-of set))
+;               (remove-duplicate-inner (rest-of set) new-set))
+;              (else (remove-duplicate-inner (rest-of set)  (insert-el (first-of set) new-set))))))
+;    (remove-duplicate-inner set (make-empty))))
+
+;member? är redan svansrekursiv
+
+;subset? också
+
+;same-set?, same-elem också.
+
+;make-set måste skrivas om:
+
+(define make-set
+  (lambda (ls)
+    (define make-set-inner
+      (lambda (ls new-set help)
+        (cond ((null? ls) new-set)
+              ((not (null? help))
+               (cond ((member? (car help) (make-set (cdr help)))
+                      (make-set-inner ls new-set (cdr help)))
+                     ((list? (car help))
+                      (make-set-inner ls (cons (make-set (car help)) new-set)(cdr help)))
+                     (else (make-set-inner ls (cons (car help) new-set) (cdr help)))))
+              ((member? (car ls) (make-set (cdr ls)))
+               (make-set-inner (cdr ls) new-set help))
+              ((list? (car ls))
+               (make-set-inner (cdr ls) new-set (cons (car ls) help)))
+              (else (make-set-inner (cdr ls) (cons (car ls) new-set) help)))))
+   ; (trace make-set-inner)
+    (make-set-inner ls '() '())))
+
+;ett element är inte en lista och finns ingen dubblett på samma nivå -> spara elementet
+;ett element är inte en lista och finns dubblett -> elementet kastas bort
+;ett element är en lista -> gå in i elementet och kör make-set
+
+;kolla om elementet finns i resten
+
+
+;union också
+
+;intersection måste skrivas om:
+
+(define intersection
+  (lambda (set1 set2)
+    (define intersection-inner
+      (lambda (set1 set2 new-set)
+        (cond ((or (empty-set? set1) (empty-set? set2)) new-set)
+              ((member? (first-of set1) set2)
+               (intersection-inner (rest-of set1) set2 (insert-el (first-of set1) new-set)))
+              (else (intersection-inner (rest-of set1) set2 new-set))
+              )))
+    (intersection-inner set1 set2 '())))
+
+;difference måste skrivas om:
+
+(define difference
+  (lambda (set1 set2)
+    (if (empty-set? set2)
+        set1
+        (difference (remove-el (first-of set2) set1) (rest-of set2)))))
+
+;myvector måste skrivas om
+
+(define myvector
+  (lambda (s1 s2)
+    (define myvector-inner
+      (lambda (s1 s2 vec)
+        (if (null? s1)
+            vec
+            (myvector-inner (rest-of s1) s2 (insert-el (vector (first-of s1) (first-of s2)) vec)))))
+    (myvector-inner s1 s2 '())))
+
+;cartesian-product behöver ej skrivas om
+
+;då finns det inga funktioner som är vanligt rekursiva kvar.
+
+;uppgift 7
+
+(define make-set-from-elems
+  (lambda (el . els)
+    (make-set (insert-el el els))))
+
+
+
+;uppgift 8
+
+;gör nya varianter av union*, difference* och cartesian-product* som tar godtyckligt många argument.
+
+;(define union*
+;  (lambda (set . sets)
+;    (make-set (apply append (insert-el set sets)))))
+;
+;(define difference*
+;  (lambda (set . sets)
+;    (make-set (apply difference (insert-el set sets)))))
+
+;rekursiv
+(define if-set
+  (lambda(set)
+    (cond ((empty-set? set) (make-empty))
+          ((set? (first-of set)) (combine-sets (first-of set) (if-set (rest-of set))))
+          (else (insert-el (first-of lst) (if-set (rest-of lst)))))))
+
+;svansrekursiv
+
+(define if-set
+  (lambda (set)
+    (define if-set-inner
+      (lambda (set new-set)
+        (cond ((empty-set? set) new-set)
+              ((set? (first-of set)) (if-set-inner (rest-of set) (combine-sets (first-of set) new-set)))
+              (else (if-set-inner (rest-of set) (insert-el (first-of set) new-set))))))
+    (if-set-inner set (make-empty))))
+                
+                
+(define union*
+  (lambda (set . sets)
+    (make-set (union set (if-set sets)))))
+
+(define difference*
+   (lambda (set . sets)
+    (make-set (difference set (if-set sets)))))
+
+;uppgift 9
+;member mha ormap:
+
+(define Member?
+  (lambda (el set)
+    (ormap (lambda (x) (same-elem? el x)) set)))
+
+(define Subset?
+  (lambda (set-1 set-2)
+    (andmap (lambda (x) (Member? x set-2)) set-1)))
+

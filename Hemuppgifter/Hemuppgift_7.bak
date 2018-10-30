@@ -1,0 +1,9 @@
+#lang racket
+
+;Uppgift 20
+
+;minimum
+
+(define minimum-value
+  (lambda (list)
+    (cond ((null? (cdr lista))

@@ -1,0 +1,41 @@
+;uppgift 9
+;member? mha ormap:
+
+;(define member?
+;  (lambda (el set)
+;    (ormap (lambda (x) (same-elem? el x)) set)))
+;
+;;subset? mha andmap
+;
+;(define subset?
+;  (lambda (set-1 set-2)
+;    (andmap (lambda (x) (member? x set-2)) set-1)))
+;
+;;intersection mha filter (funkar inte)
+;
+;(define intersection
+;  (lambda (set-1 set-2)
+;    (filter (lambda (x) (member? x set-2)) set-1)))
+;
+;;difference mha filter (funkar inte)
+;
+;(define difference
+;  (lambda (set-1 set-2)
+;    (filter (lambda (x) (not (member? x set-2))) set-1)))
+;
+;;cartesian product mha map två gånger (funkar ej)
+;(define cartesian-product
+;  (lambda (set-1 set-2)
+;    (map (lambda (x) (vector x set-1)) (map ))))
+;
+;;make-set mha map & remove-duplicates (funkar ej)
+;(define make-set
+;  (lambda (lst)
+;    (map (lambda (x) (remove-duplicates x same-elem?)) lst)))
+
+
+;uppgift 10
+
+(define union
+  (lambda (set1 set2)
+    (remove-duplicates (append set1 set2))))

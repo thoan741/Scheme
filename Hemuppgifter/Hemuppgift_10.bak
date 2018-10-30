@@ -1,0 +1,16 @@
+;hemuppgift 10
+
+;Uppgift 40
+
+;a)
+
+;skriv en procedur som tar en vektor med heltal och returnerar det minsta talet i vektorn.
+
+(define min-vector
+  (lambda (vec)
+    (define inner
+      (lambda (vec com)
+        (if (= com (vector-length vec))
+            (vector-ref (- com 1) vec)
+            (min (vector-ref (- com 1) vec) (inner vec (+ com 1))))))
+    (inner vec 1)))

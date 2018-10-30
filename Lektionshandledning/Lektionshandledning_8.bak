@@ -1,0 +1,8 @@
+#lang racket
+
+;Alternativt:
+(range 5) ;skapar en lista '(0 1 2 3 4)
+(range 1 5) ;skapar en lista, men börjar på 1. tar bort elle element och ger '(1 2 3 4)
+(range 7 3 -1) ;går från 7 till 3, men inte till trean med steg -1. '(7 6 5 4)
+(identity 2) ;=> 2, returnerar det värde vi ger den
+(identity #t) ;=> #t

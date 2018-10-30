@@ -1,0 +1,150 @@
+#lang racket
+
+;; LIST.SCM
+;;
+
+;;;;;;;;;;
+;; Assignment 1
+
+;; list-create -- create an empty list
+(define list-create
+  (lambda ()
+    '()))
+
+;; list-empty -- ???
+(define list-empty?
+  (lambda (ls)
+    (if (null? ls)
+        #t
+        #f)))
+
+;; list-insert -- ???
+(define list-insert
+  (lambda (el ls)
+    (cons el ls)))
+
+;; list-delete -- ???
+(define list-delete
+  (lambda (el ls)
+    (cond ((null? ls) '())
+          ((eq? (car ls) el) (list-delete el (cdr ls)))
+          (else (cons (car ls) (list-delete el (cdr ls)))))))
+
+;; list-first -- ???
+(define list-first
+  (lambda (ls)
+    (car ls)))
+
+;; list-rest -- ???
+(define list-rest
+  (lambda (ls)
+    (cdr ls)))
+
+;; list-len -- ???
+(define list-len
+  (lambda (ls)
+    (if (null? ls)
+        0
+        (+ 1 (list-len (cdr ls))))))
+
+;; list-nth -- ???
+(define list-nth
+  (lambda (n ls)
+    (cond ((< n 1) (error "n för litet"))
+      ((null? ls) (error "n större än listans längd"))
+      ((= n 1)
+        (car ls))
+        (else (list-nth (- n 1) (cdr ls))))))
+
+;;;;;;;;;;
+;; Test of list functions (supplied by course team)
+
+;; list-test -- run list test with an (initially) empty list
+(define list-test
+  (lambda ()
+    (list-edit (list-create))))
+
+;; list-edit -- interactively test list manipulation functions
+(define list-edit
+  (lambda (lst)
+    (display "Edit operation (insert/delete/print/nth/first/rest/end): ")
+    (let ((oper (read)))
+      (cond ((or (eq? oper 'insert)
+                 (eq? oper 'i))
+             (list-edit (list-insert (read-element "Element to insert: ")
+                                     lst)))
+            ((or (eq? oper 'delete)
+                 (eq? oper 'd))
+             (list-edit (list-delete (read-element "Element to delete: ")
+                                     lst)))
+            ((or (eq? oper 'nth)
+                 (eq? oper 'n))
+             (elem-print (list-nth (read-element "Element number: ")
+                                   lst))
+             (newline)
+             (list-edit lst))
+            ((or (eq? oper 'print)
+                 (eq? oper 'p))
+             (list-print lst)
+             (list-edit lst))
+            ((or (eq? oper 'rest)
+                 (eq? oper 'r))
+             (list-print (list-rest lst))
+             (list-edit lst))
+            ((or (eq? oper 'first)
+                 (eq? oper 'f))
+             (elem-print (list-first lst))
+             (newline)
+             (list-edit lst))
+            ((or (eq? oper 'end)
+                 (eq? oper 'e)) lst)
+            (else (display "Unknown operation")
+                  (newline)
+                  (list-edit lst))))))
+
+;; read-element -- prompt the user with the given string, then
+;; return the answer
+(define read-element
+  (lambda (operation)
+    (display operation)
+    (read)))
+
+;; list-print -- print each element in the given list, separated
+;; by " "
+(define list-print
+  (lambda (lst)
+    (cond ((list-empty? lst) (newline))
+          (else (display (list-first lst))
+                (display " ")
+                (list-print (list-rest lst))))))
+
+;; elem-print -- print the given element
+(define elem-print
+  (lambda (elem)
+    (display elem)))
+
+;;;;;;;;;;
+;; Assignment 2
+
+(define to-do-each
+  (lambda (proc ls)
+    (if (null? ls)
+        '()
+        (cons (proc (car ls))(to-do-each proc (cdr ls))))))
+
+(define add-one
+  (lambda (x)
+    (+ 1 x)))
+
+;(define mylist (list-edit (list-create)))
+
+;;;;;;;;;;
+;; Assignment 3
+
+
+(define (add-n x)
+    (+ add-n x))
+  
+(define add-two (add-n 2))
+
+(add-two 3)

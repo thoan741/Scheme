@@ -1,0 +1,12 @@
+#lang racket
+
+;hemuppgift 5
+
+;15b,15c,16
+
+(define square-list
+  (lambda (a-list)
+    (if (<??>)
+        (<??>)
+        (cons (square (<??>))
+              (square-list (<??>))))))

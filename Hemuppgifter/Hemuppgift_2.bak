@@ -1,0 +1,31 @@
+#lang racket
+
+;Hemuppgift 2
+
+;Nedan finns en sekvens av uttryck. Vad kommer scheme att skriva som svar på inmatning av dessa uttryck?
+;Antag att de matas in i den ordning de står.
+
+(- 9 1) ;beräknar 9-1 och skriver ut resultatet, 8.
+
+(/ 6 2) ;beräknar 6/2 och skriver ut resultatet, 3.
+
+(+ (* 2 4) (- 4 6)) ;beräknar uttrycket som (2*4)/(4-6) och utskrift blir då -4.
+
+(define a 3) ;vi ger variabeln a värdet 3.
+
+(define b (+ a 1)) ;b ges värdet a+1, alltså värdet 4 då a har värdet 3.
+
+(+ a b (* a b)) ;beräknar a+b+(a*b) vilket med insatta värden ger svaret 19.
+
+(= a b) ;jämför om a och b har samma värde. Returnerar #f eftersom att dom ej har det.
+
+(cond ((= a 4) 6)           ;jämför a med värdet 4 och returnerar 6 om så är fallet. Går vidare till nästa rad om villkoret är falskt.
+      ((= b 4) (+ 6 7 a))   ;jämför b med 4 och returnerar värdet av (6+7+a), vilket blir 16 om samma. Annars gå vidare till nästa rad.
+      (else 25))            ;om inget av ovanstående villkor uppfyllts, returnera talet 25.
+;I detta fall skrivs talet 16 ut, eftersom jämförelsen mellan b och 4 uppfyller villkoret.
+
+(* (cond ((> a b) a)  ;är a större än b? returnera a om så är fallet
+         ((< a b) b)  ;är b större än a? returnera b om så är fallet.
+         (else -1))
+   (+ a 1))
+
